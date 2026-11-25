@@ -1,0 +1,16 @@
+:root {
+  --bs-primary: #1f5f8b;
+  --bs-primary-rgb: 31, 95, 139;
+  --bs-link-color: #1f5f8b;
+  --bs-link-hover-color: #154566;
+}
+body { background: #f5f7f9; }
+.btn-primary { --bs-btn-bg: #1f5f8b; --bs-btn-border-color: #1f5f8b; --bs-btn-hover-bg: #154566; --bs-btn-hover-border-color: #154566; }
+.navbar-brand { font-weight: 600; letter-spacing: .01em; }
+.avatar { width: 32px; height: 32px; object-fit: cover; border-radius: 50%; }
+.avatar-lg { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; }
+.auth-card { max-width: 420px; margin: 4rem auto; }
+.stat { font-size: 2rem; font-weight: 600; line-height: 1; }
+.media-view { max-width: 100%; max-height: 70vh; }
+.note-text { white-space: pre-wrap; }
+:focus-visible { outline: 3px solid #f0a500; outline-offset: 2px; }

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ file.original_name }}{% endblock %}
+{% block content %}
+<nav class="mb-3"><a href="{{ url_for('files.index') }}">Voltar para arquivos</a></nav>
+<h1 class="h4 mb-3 text-break">{{ file.original_name }}</h1>
+{% set src = url_for('files.content', file_id=file.id) %}
+<div class="card card-body mb-3 text-center">
+  {% if kind == "image" %}
+    <img class="media-view mx-auto" src="{{ src }}" alt="{{ file.original_name }}">
+  {% elif kind == "video" %}
+    <video class="media-view mx-auto" src="{{ src }}" controls preload="metadata"></video>
+  {% elif kind == "audio" %}
+    <audio class="w-100" src="{{ src }}" controls preload="metadata"></audio>
+  {% else %}
+    <p class="mb-0">Pré-visualização indisponível para este tipo de arquivo.</p>
+  {% endif %}
+</div>
+<p class="text-secondary">{{ file.media_type }}, {{ file.size | tamanho }}, enviado em {{ file.uploaded_at | data }}</p>
+<div class="d-flex gap-2">
+  <a class="btn btn-outline-primary" href="{{ src }}" download="{{ file.original_name }}">Baixar</a>
+  <form method="post" action="{{ url_for('files.delete', file_id=file.id) }}" onsubmit="return confirm('Excluir este arquivo?')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-outline-danger" type="submit">Excluir</button>
+  </form>
+</div>
+{% endblock %}

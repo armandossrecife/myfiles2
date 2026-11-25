@@ -1,0 +1,58 @@
+# MyFiles: dois containers
+#   back  -> API FastAPI + banco SQLite (dados no volume myfiles-data)
+#   front -> interface web Flask (gunicorn)
+#
+# Uso:  cp .env.example .env   (opcional)
+#       docker compose up --build -d
+#       abra http://localhost:5001
+name: myfiles
+
+services:
+  back:
+    build:
+      context: .
+      dockerfile: docker/back.dockerfile
+    image: myfiles-back:latest
+    container_name: myfiles-back
+    restart: unless-stopped
+    environment:
+      MYFILES_SECRET_KEY: ${MYFILES_SECRET_KEY:-dev-secret-troque-em-producao-0123456789}
+      MYFILES_DATABASE_URL: sqlite:////data/myfiles.db
+      MYFILES_STORAGE_DIR: /data
+      MYFILES_MAX_UPLOAD_MB: ${MYFILES_MAX_UPLOAD_MB:-50}
+      MYFILES_TOKEN_EXPIRE_MINUTES: ${MYFILES_TOKEN_EXPIRE_MINUTES:-30}
+      MYFILES_ADMIN_USERNAME: ${MYFILES_ADMIN_USERNAME:-}
+      MYFILES_ADMIN_PASSWORD: ${MYFILES_ADMIN_PASSWORD:-}
+      MYFILES_ADMIN_EMAIL: ${MYFILES_ADMIN_EMAIL:-}
+    volumes:
+      - myfiles-data:/data          # banco + uploads + fotos de perfil
+    ports:
+      - "127.0.0.1:${BACK_PORT:-8000}:8000"   # só para o Swagger; o frontend usa a rede interna
+    networks:
+      - myfiles-net
+
+  front:
+    build:
+      context: .
+      dockerfile: docker/front.dockerfile
+    image: myfiles-front:latest
+    container_name: myfiles-front
+    restart: unless-stopped
+    environment:
+      MYFILES_BACKEND_URL: http://back:8000   # nome do serviço na rede do Compose
+      MY_SECRET_KEY: ${MY_SECRET_KEY:-dev-secret-frontend-troque-em-producao}
+      MYFILES_MAX_UPLOAD_MB: ${MYFILES_MAX_UPLOAD_MB:-50}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+    ports:
+      - "${FRONT_PORT:-5001}:5001"
+    depends_on:
+      back:
+        condition: service_healthy    # só sobe depois que a API responder /health
+    networks:
+      - myfiles-net
+
+volumes:
+  myfiles-data:
+
+networks:
+  myfiles-net:

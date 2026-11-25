@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Linha do tempo{% endblock %}
+{% block head %}<script src="{{ url_for('plotly_js') }}"></script>{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Linha do tempo</h1>
+{% if graph_json %}
+<div id="grafico" class="card card-body"></div>
+{% else %}
+<p class="text-secondary">Não há atividades para exibir.</p>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{% if graph_json %}
+<script>
+  const fig = {{ graph_json | safe }};
+  Plotly.newPlot("grafico", fig.data, fig.layout, {responsive: true});
+</script>
+{% endif %}
+{% endblock %}

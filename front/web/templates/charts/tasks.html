@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Tarefas{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Tarefas</h1>
+{% if tarefas %}
+<div class="table-responsive">
+<table class="table bg-white">
+  <thead><tr><th>Descrição</th><th>Prazo</th><th>Prioridade</th><th>Situação</th></tr></thead>
+  <tbody>
+    {% for t in tarefas %}
+    <tr>
+      <td>{{ t.descricao }}</td><td>{{ t.data_expiracao }}</td><td>{{ t.prioridade }}</td>
+      <td>{{ "Concluída" if t.concluida else "Pendente" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-secondary">Nenhuma tarefa cadastrada.</p>
+{% endif %}
+{% endblock %}

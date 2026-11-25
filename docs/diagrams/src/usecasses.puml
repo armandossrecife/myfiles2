@@ -1,0 +1,32 @@
+@startuml
+skinparam actorStyle awesome
+left to right direction
+
+actor Usuário as user
+
+rectangle MyFiles {
+  usecase "Criar conta" as uc_register
+  usecase "Entrar" as uc_login
+  usecase "Sair" as uc_logout
+  usecase "Ver painel" as uc_dashboard
+  usecase "Gerenciar perfil\n(foto)" as uc_profile
+  usecase "Gerenciar anotações\n(criar, editar, excluir)" as uc_notes
+  usecase "Enviar arquivo" as uc_upload
+  usecase "Listar meus arquivos" as uc_list
+  usecase "Visualizar/baixar arquivo" as uc_view
+  usecase "Excluir arquivo" as uc_delete
+  usecase "Ver gráficos" as uc_charts
+}
+
+user --> uc_register
+user --> uc_login
+user --> uc_logout
+user --> uc_dashboard
+user --> uc_profile
+user --> uc_notes
+user --> uc_upload
+user --> uc_list
+user --> uc_view
+user --> uc_delete
+user --> uc_charts
+@enduml

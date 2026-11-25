@@ -1,0 +1,21 @@
+@startuml MyFiles
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Usuário")
+Container(browser, "Navegador", "HTML, Bootstrap", "Interface usada pelo usuário")
+
+System_Boundary(c1, "MyFiles") {
+    Container(front, "Frontend", "Python, Flask", "Páginas, sessão do usuário e repasse das mídias (proxy)")
+    Container(back, "Backend", "Python, FastAPI", "API REST com autenticação JWT")
+    ContainerDb(db, "Banco de dados", "SQLite (SQLAlchemy)", "Usuários, anotações e metadados dos arquivos")
+    Container(disk, "Armazenamento", "Sistema de arquivos", "Conteúdo das mídias e fotos de perfil")
+}
+
+Rel_Down(user, browser, "Usa")
+Rel_Down(browser, front, "Usa", "HTTP")
+Rel_R(front, back, "Chama a API", "HTTP + Bearer JWT")
+Rel_Down(back, db, "Lê/grava")
+Rel_Down(back, disk, "Lê/grava", "arquivos")
+
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Arquivos{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Arquivos</h1>
+<form method="post" action="{{ url_for('files.upload') }}" enctype="multipart/form-data" class="card card-body mb-4">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label class="form-label" for="file">Enviar imagem, vídeo ou áudio</label>
+  <div class="d-flex flex-wrap gap-2">
+    <input class="form-control" style="max-width: 28rem" type="file" id="file" name="file" accept="{{ accept }}" required>
+    <button class="btn btn-primary" type="submit">Enviar arquivo</button>
+  </div>
+  <div class="form-text">Formatos aceitos: JPG, PNG, MP4 e MP3.</div>
+</form>
+{% if files %}
+<div class="table-responsive">
+<table class="table table-hover bg-white align-middle">
+  <thead><tr><th>Nome</th><th>Tipo</th><th>Tamanho</th><th>Enviado em</th><th></th></tr></thead>
+  <tbody>
+    {% for f in files %}
+    <tr>
+      <td><a href="{{ url_for('files.view', file_id=f.id) }}">{{ f.original_name }}</a></td>
+      <td>{{ f.media_type }}</td>
+      <td>{{ f.size | tamanho }}</td>
+      <td>{{ f.uploaded_at | data }}</td>
+      <td class="text-end">
+        <form method="post" action="{{ url_for('files.delete', file_id=f.id) }}" onsubmit="return confirm('Excluir este arquivo?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-secondary">Nenhum arquivo enviado ainda. Escolha um arquivo acima para começar.</p>
+{% endif %}
+{% endblock %}

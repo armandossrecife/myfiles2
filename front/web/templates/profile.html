@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">Perfil</h1>
+<div class="card card-body d-flex flex-column flex-sm-row gap-4 align-items-sm-center">
+  <img class="avatar-lg" src="{{ url_for('profile.photo') }}" alt="Foto de perfil">
+  <div class="flex-grow-1">
+    <dl class="row mb-3">
+      <dt class="col-sm-3">Usuário</dt><dd class="col-sm-9">{{ profile.username }}</dd>
+      <dt class="col-sm-3">E-mail</dt><dd class="col-sm-9">{{ profile.email }}</dd>
+    </dl>
+    <form method="post" action="{{ url_for('profile.upload_photo') }}" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label class="form-label" for="image">{{ "Trocar foto" if profile.has_custom_image else "Adicionar foto" }}</label>
+      <div class="d-flex flex-wrap gap-2">
+        <input class="form-control" style="max-width: 24rem" type="file" id="image" name="image" accept=".jpg,.jpeg,.png" required>
+        <button class="btn btn-primary" type="submit">Salvar foto</button>
+      </div>
+      <div class="form-text">JPG ou PNG.</div>
+    </form>
+  </div>
+</div>
+{% endblock %}

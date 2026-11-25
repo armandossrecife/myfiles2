@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Editar anotação{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Editar anotação</h1>
+<form method="post" class="card card-body">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label class="form-label" for="description">Texto</label>
+  <textarea class="form-control mb-3" id="description" name="description" rows="5" maxlength="1024" required>{{ note.description }}</textarea>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Salvar alterações</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('notes.index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

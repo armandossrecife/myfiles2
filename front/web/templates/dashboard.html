@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Início{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+  <img class="avatar-lg" style="width:64px;height:64px" src="{{ url_for('profile.photo') }}" alt="Foto de perfil">
+  <div>
+    <h1 class="h3 mb-0">Olá, {{ profile.username }}</h1>
+    <span class="text-secondary">{{ profile.email }}</span>
+  </div>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-sm-6">
+    <a class="card text-decoration-none h-100" href="{{ url_for('files.index') }}">
+      <div class="card-body"><div class="stat" data-testid="files-count">{{ files_count }}</div><div class="text-secondary">arquivos</div></div>
+    </a>
+  </div>
+  <div class="col-sm-6">
+    <a class="card text-decoration-none h-100" href="{{ url_for('notes.index') }}">
+      <div class="card-body"><div class="stat" data-testid="notes-count">{{ notes_count }}</div><div class="text-secondary">anotações</div></div>
+    </a>
+  </div>
+</div>
+<div class="row g-4">
+  <section class="col-lg-6">
+    <h2 class="h5">Arquivos recentes</h2>
+    {% if recent_files %}
+    <ul class="list-group">
+      {% for f in recent_files %}
+      <li class="list-group-item d-flex justify-content-between">
+        <a href="{{ url_for('files.view', file_id=f.id) }}">{{ f.original_name }}</a>
+        <span class="text-secondary small">{{ f.size | tamanho }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-secondary">Nenhum arquivo ainda. <a href="{{ url_for('files.index') }}">Envie o primeiro</a>.</p>
+    {% endif %}
+  </section>
+  <section class="col-lg-6">
+    <h2 class="h5">Anotações recentes</h2>
+    {% if recent_notes %}
+    <ul class="list-group">
+      {% for n in recent_notes %}<li class="list-group-item note-text">{{ n.description }}</li>{% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-secondary">Nenhuma anotação ainda. <a href="{{ url_for('notes.index') }}">Escreva a primeira</a>.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
